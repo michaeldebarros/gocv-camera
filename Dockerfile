@@ -1,16 +1,85 @@
-FROM golang:1.11.1-stretch as base
-WORKDIR /camera
-COPY . .
-ENV GO_CXXFLAGS=-std=c++11
-ENV CGO_CPPFLAGS=-I/usr/local/Cellar/opencv/3.4.3/include
-ENV CGO_CPPFLAGS="-L/usr/local/Cellar/opencv/3.4.3/lib -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_aruco -lopencv_bgsegm -lopencv_bioinspired -lopencv_ccalib -lopencv_dnn_objdetect -lopencv_dpm -lopencv_face -lopencv_photo -lopencv_fuzzy -lopencv_hfs -lopencv_img_hash -lopencv_line_descriptor -lopencv_optflow -lopencv_reg -lopencv_rgbd -lopencv_saliency -lopencv_stereo -lopencv_structured_light -lopencv_phase_unwrapping -lopencv_surface_matching -lopencv_tracking -lopencv_datasets -lopencv_dnn -lopencv_plot -lopencv_xfeatures2d -lopencv_shape -lopencv_video -lopencv_ml -lopencv_ximgproc -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_flann -lopencv_xobjdetect -lopencv_imgcodecs -lopencv_objdetect -lopencv_xphoto -lopencv_imgproc -lopencv_core"
-RUN go get
-RUN go build -tags customenv -o main .
+FROM golang:1.11.1-alpine
 
-FROM scratch
-COPY --from=base /camera/main /camera
+ENV OPENCV_VERSION=3.4.2
+ENV BUILD="ca-certificates \
+    git \
+    build-base \
+    musl-dev \
+    alpine-sdk \
+    make \
+    gcc \
+    g++ \
+    libc-dev \
+    linux-headers \
+    libjpeg-turbo \
+    libpng \
+    libwebp \
+    libwebp-dev \
+    tiff \
+    libavc1394 \
+    jasper-libs \
+    openblas \
+    libgphoto2 \
+    gstreamer \
+    gst-plugins-base"
+
+ENV DEV="clang clang-dev cmake pkgconf \
+    openblas-dev gstreamer-dev gst-plugins-base-dev \
+    libgphoto2-dev libjpeg-turbo-dev libpng-dev \
+    tiff-dev jasper-dev libavc1394-dev"
+
+
+RUN apk update && \
+    apk add --no-cache ${BUILD} ${DEV}
+
+RUN mkdir /tmp/opencv && \
+    cd /tmp/opencv && \
+    wget -O opencv.zip https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip && \
+    unzip opencv.zip && \
+    wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip && \
+    unzip opencv_contrib.zip && \
+    mkdir /tmp/opencv/opencv-${OPENCV_VERSION}/build && cd /tmp/opencv/opencv-${OPENCV_VERSION}/build && \
+    cmake \
+    -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D OPENCV_EXTRA_MODULES_PATH=/tmp/opencv/opencv_contrib-${OPENCV_VERSION}/modules \
+    -D WITH_FFMPEG=YES \
+    -D INSTALL_C_EXAMPLES=NO \
+    -D INSTALL_PYTHON_EXAMPLES=NO \
+    -D BUILD_ANDROID_EXAMPLES=NO \
+    -D BUILD_DOCS=NO \
+    -D BUILD_TESTS=NO \
+    -D BUILD_PERF_TESTS=NO \
+    -D BUILD_EXAMPLES=NO \
+    -D BUILD_opencv_java=NO \
+    -D BUILD_opencv_python=NO \
+    -D BUILD_opencv_python2=NO \
+    -D BUILD_opencv_python3=NO .. && \
+    make -j4 && \
+    make install && \
+    cd && rm -rf /tmp/opencv
+
+RUN apk del ${DEV_DEPS} && \
+    rm -rf /var/cache/apk/*
+
+ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig
+ENV LD_LIBRARY_PATH /usr/local/lib64
+ENV CGO_CPPFLAGS -I/usr/local/include
+ENV CGO_CXXFLAGS "--std=c++1z"
+ENV CGO_LDFLAGS "-L/usr/local/lib -lopencv_core -lopencv_face -lopencv_videoio -lopencv_imgproc -lopencv_highgui -lopencv_imgcodecs -lopencv_objdetect -lopencv_features2d -lopencv_video -lopencv_dnn -lopencv_xfeatures2d -lopencv_plot -lopencv_tracking -lopencv_calib3d"
+
+
+#WORKDIR /camera
+
+COPY . .
+
+RUN go get -u -d gocv.io/x/gocv
+
+RUN go get -u github.com/gin-gonic/gin
+
+RUN go build -tags customenv -o camera
+
 
 EXPOSE 8080
 
-CMD ["/camera"]
-
+CMD ["./camera"]
