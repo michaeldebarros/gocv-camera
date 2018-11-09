@@ -39,3 +39,14 @@ Porém, aproveitei a oportunidade para testar o framework [Gin](https://github.c
 
 Os testes foram ....
 
+###### **Dockerfiles** ######
+
+No intuito de facilitar o deploy este possui algumas Dockerfiles para conteinerização com essa ferramenta.
+
+A primeira imagem é a imagem "completa", que pode ser construída com a Dockerfile em "./docker/full-image". Ela parte de uma imagem golang:1.11.1-alpine passando pela instalação de todo OpenCV e depois faz o build do projeto em si.
+
+Para fazer criar a imagem é necessário passar a flag -f com o path da imagem dessa forma: docker build -t full-image  -f ./docker/full-image/Dockerfile .
+
+Esta imagem é pesada, com tamanho de 1.29 GB.
+
+
