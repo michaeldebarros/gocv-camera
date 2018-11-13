@@ -18,7 +18,7 @@ O objetivo desta aplicação é criar uma API REST na linguagem Go que faça a g
     Parâmetros: nenhum
     Retorno: Download do arquivo gravado`
 
-### **Premissas** ###
+### **Premisas** ###
 
 Tendo em vista o enunciado sintético, algumas premissas foram traçadas a fim de dar tratamento coerente à aplicação.
 
@@ -36,10 +36,9 @@ Tratando-se de apenas 3 rotas, possivelmente a melhor opção seria usar o [serv
 
 Porém, aproveitei a oportunidade para testar o framework [Gin](https://github.com/gin-gonic/gin).
 
+#### **Rodando** ####
 
-#### **Testes** ####
-
-Os testes foram ....
+[Neste](https://www.youtube.com/watch?v=WVOHA0BA0r0&t=3s) vídeo é possível ver o programa rodando em um Ubuntu 18.04, tendo o OpenCV sido instalado por Meio [desta](https://github.com/hybridgroup/gocv/blob/master/Makefile) Makefile.
 
 #### **Dockerfiles** ####
 
