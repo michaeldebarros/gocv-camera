@@ -69,7 +69,7 @@ ENV CGO_CXXFLAGS "--std=c++1z"
 ENV CGO_LDFLAGS "-L/usr/local/lib -lopencv_core -lopencv_face -lopencv_videoio -lopencv_imgproc -lopencv_highgui -lopencv_imgcodecs -lopencv_objdetect -lopencv_features2d -lopencv_video -lopencv_dnn -lopencv_xfeatures2d -lopencv_plot -lopencv_tracking -lopencv_calib3d"
 
 
-#WORKDIR /camera
+ENV CAMERA_INDEX=0
 
 COPY . .
 
