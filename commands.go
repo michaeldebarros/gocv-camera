@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"time"
+	"os"
+	"strconv"
 
 	"gocv.io/x/gocv"
 )
@@ -10,6 +12,17 @@ import (
 func startRecording(okChan chan comm) {
 	//the idea is to capture video from ONE camera, so we pass in the first deviceID
 	deviceID := 0
+
+	index := os.Getenv("CAMERA_INDEX")
+	if index == "" {
+		index = "0"
+		i,err := strconv.Atoi(index)
+		if err != nil{
+			log.Println("Erro ao converter CAMERA_INDEX para int.")
+		}
+		deviceID = i
+	} 
+	
 	saveFile := "video.avi"
 
 	camera, err := gocv.OpenVideoCapture(deviceID)

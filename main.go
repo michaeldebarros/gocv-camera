@@ -22,8 +22,8 @@ var recording bool
 func main() {
 	r := gin.Default()
 	//mudar para POST
-	r.GET("/api/v1/record/start", startHandler)
-	r.GET("/api/v1/record/stop", stopHandler)
+	r.POST("/api/v1/record/start", startHandler)
+	r.POST("/api/v1/record/stop", stopHandler)
 	r.GET("/api/v1/record", getRecordingHandler)
 	port := os.Getenv("PORT")
 	if port == "" {
