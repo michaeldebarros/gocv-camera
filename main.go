@@ -66,5 +66,6 @@ func stopHandler(c *gin.Context) {
 }
 
 func getRecordingHandler(c *gin.Context) {
+	c.Status(200)
 	c.File("video.avi")
 }
