@@ -30,6 +30,8 @@ Esta simplicidade reflete-se no uso de estruturas globais como forma de comunica
 
 Outro aspecto da arquitetura simples está na gravação do vídeo em si.  O enuciado fala em "uma" câmera ligada ao servidor, exclindo a hipótese de mapeamento de câmeras e gravacões simultâneas. Aliado a isso há também o fato de que a rota `GET /api/v1/record` retornará o download **do arquivo** gravado, indicando a existência de apenas um arquivo de vídeo existente no sistema.  Hipótese distinta seria aquela em que cada comando de gravação gerasse um arquivo distinto, com um id diferente e timestamp.  Porém, não sendo esse o enunciado, foi optado pelo desenho de arquivo de vídeo único, ficando apenas o mais recente disponível para download. 
 
+Essa aplicação foi feita com Go 1.11.1, usando `go modules.
+
 #### **Rotas** ####
 
 Tratando-se de apenas 3 rotas, possivelmente a melhor opção seria usar o [servidor](https://golang.org/pkg/net/http/#Server) da biblioteca padrão do Go.
