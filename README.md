@@ -38,6 +38,6 @@ Porém, aproveitei a oportunidade para testar o framework [Gin](https://github.c
 
 #### **Rodando** ####
 
-[Neste](https://www.youtube.com/watch?v=WVOHA0BA0r0&t=3s) vídeo é possível ver o programa rodando em um Ubuntu 18.04, tendo o OpenCV sido instalado por Meio [desta](https://github.com/hybridgroup/gocv/blob/master/Makefile) Makefile.
+[Neste](https://www.youtube.com/watch?v=WVOHA0BA0r0&t=3s) vídeo é possível ver o programa rodando com o Ubuntu, tendo o OpenCV sido instalado por Meio [desta](https://github.com/hybridgroup/gocv/blob/master/Makefile) Makefile.
 
 
